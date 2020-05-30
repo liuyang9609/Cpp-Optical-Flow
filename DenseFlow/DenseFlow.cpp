@@ -1,108 +1,60 @@
-﻿#include "opencv2/video/tracking.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
-
+﻿#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
+#include "opencv2/video/tracking.hpp"
+#include <vector>
 #include <stdio.h>
 #include <iostream>
 
 using namespace cv;
+using namespace std;
 
-static void convertFlowToImage(const Mat& flow_x, const Mat& flow_y, Mat& img_x, Mat& img_y, double lowerBound, double higherBound) {
-#define CAST(v, L, H) ((v) > (H) ? 255 : (v) < (L) ? 0 : cvRound(255*((v) - (L))/((H)-(L))))
-	for (int i = 0; i < flow_x.rows; ++i) {
-		for (int j = 0; j < flow_y.cols; ++j) {
-			float x = flow_x.at<float>(i, j);
-			float y = flow_y.at<float>(i, j);
-			img_x.at<uchar>(i, j) = CAST(x, lowerBound, higherBound);
-			img_y.at<uchar>(i, j) = CAST(y, lowerBound, higherBound);
-		}
-	}
-#undef CAST
-}
-
-static void drawOptFlowMap(const Mat& flow, Mat& cflowmap, int step, double, const Scalar& color)
+int main()
 {
-	for (int y = 0; y < cflowmap.rows; y += step)
-		for (int x = 0; x < cflowmap.cols; x += step)
-		{
-			const Point2f& fxy = flow.at<Point2f>(y, x);
-			line(cflowmap, Point(x, y), Point(cvRound(x + fxy.x), cvRound(y + fxy.y)),
-				color);
-			circle(cflowmap, Point(x, y), 2, color, -1);
-		}
-}
+    VideoCapture cap("highway.mov");
 
-int main(int argc, char** argv)
-{
-	// IO operation
+    Mat flow, frame;
+    UMat flowUmat, prevgray;
 
-	//const char* keys =
-	//{
-	//	"{ f  | vidFile      | ex2.avi | filename of video }"
-	//	"{ x  | xFlowFile    | flow_x | filename of flow x component }"
-	//	"{ y  | yFlowFile    | flow_y | filename of flow x component }"
-	//	"{ i  | imgFile      | flow_i | filename of flow image}"
-	//	"{ b  | bound | 15 | specify the maximum of optical flow}"
-	//};
+    for (;;)
+    {
+        bool Is = cap.grab();
+        if (Is == false) {
+            cout << "Video Capture Fail" << endl;
+            break;
+        }
+        else {
+            Mat img;
+            Mat original;
 
-	//CommandLineParser cmd(argc, argv, keys);
-	//string vidFile = cmd.get<string>("vidFile");
-	//string xFlowFile = cmd.get<string>("xFlowFile");
-	//string yFlowFile = cmd.get<string>("yFlowFile");
-	//string imgFile = cmd.get<string>("imgFile");
-	//int bound = cmd.get<int>("bound");
+            cap.retrieve(img, 0);
+            resize(img, img, Size(640, 480));
 
+            img.copyTo(original);
+            cvtColor(img, img, COLOR_BGR2GRAY);
 
-	//VideoCapture capture(vidFile);
-	//if (!capture.isOpened()) {
-	//	printf("Could not initialize capturing..\n");
-	//	return -1;
-	//}
+            if (prevgray.empty() == false) {
+                calcOpticalFlowFarneback(prevgray, img, flowUmat, 0.4, 1, 48, 2, 8, 1.2, 0);
+                flowUmat.copyTo(flow);
 
-	int frame_num = 0;
-	Mat image, prev_image, prev_grey, grey, frame, flow, cflow;
+                for (int y = 0; y < original.rows; y += 5) {
+                    for (int x = 0; x < original.cols; x += 5) {
+                        const Point2f flowatxy = flow.at<Point2f>(y, x) * 10;
+                        line(original, Point(x, y), Point(cvRound(x + flowatxy.x), cvRound(y + flowatxy.y)), Scalar(255, 0, 0));
+                        circle(original, Point(x, y), 1, Scalar(0, 0, 0), -1);
+                    }
+                }
 
-	while (true) {
-	//	capture >> frame;
-		if (frame.empty())
-			break;
+                namedWindow("prew", WINDOW_AUTOSIZE);
+                imshow("prew", original);
 
-		if (frame_num == 0) {
-			image.create(frame.size(), CV_8UC3);
-			grey.create(frame.size(), CV_8UC1);
-			prev_image.create(frame.size(), CV_8UC3);
-			prev_grey.create(frame.size(), CV_8UC1);
+                img.copyTo(prevgray);
+            }
+            else {
+                img.copyTo(prevgray);
+            }
 
-			frame.copyTo(prev_image);
-			cvtColor(prev_image, prev_grey, COLOR_BGR2GRAY);
-
-			frame_num++;
-			continue;
-		}
-
-		frame.copyTo(image);
-		cvtColor(image, grey, COLOR_BGR2GRAY);
-
-		// calcOpticalFlowFarneback(prev_grey,grey,flow,0.5, 3, 15, 3, 5, 1.2, 0 );
-		calcOpticalFlowFarneback(prev_grey, grey, flow, 0.702, 5, 10, 2, 7, 1.5, cv::OPTFLOW_FARNEBACK_GAUSSIAN);
-
-		// prev_image.copyTo(cflow);
-		// drawOptFlowMap(flow, cflow, 12, 1.5, Scalar(0, 255, 0));
-
-		Mat flows[2];
-		split(flow, flows);
-		Mat imgX(flows[0].size(), CV_8UC1);
-		Mat imgY(flows[0].size(), CV_8UC1);
-		convertFlowToImage(flows[0], flows[1], imgX, imgY, -bound, bound);
-		char tmp[20];
-		sprintf(tmp, "_%04d.jpg", int(frame_num));
-		//imwrite(xFlowFile + tmp, imgX);
-		//imwrite(yFlowFile + tmp, imgY);
-		//imwrite(imgFile + tmp, image);
-
-		std::swap(prev_grey, grey);
-		std::swap(prev_image, image);
-		frame_num = frame_num + 1;
-	}
-	return 0;
+            int key1 = waitKey(20);
+        }
+    }
 }
