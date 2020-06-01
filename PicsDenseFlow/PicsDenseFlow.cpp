@@ -1,20 +1,42 @@
-﻿// PicsDenseFlow.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-
+﻿#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/objdetect/objdetect.hpp"
+#include "opencv2/video/tracking.hpp"
+#include <vector>
+#include <stdio.h>
 #include <iostream>
+
+using namespace cv;
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	Mat last_frame, next_frame;
+	Mat flow_frame;
+
+	last_frame = imread("000045_10.png");
+	next_frame = imread("000045_11.png");
+
+	Mat last_frame_gray, next_frame_gray;
+	cvtColor(last_frame, last_frame_gray, COLOR_BGR2GRAY);
+	cvtColor(next_frame, next_frame_gray, COLOR_BGR2GRAY);
+
+	calcOpticalFlowFarneback(last_frame_gray, next_frame_gray, flow_frame, 0.4, 1, 48, 2, 8, 1.2, 0);
+	for (int y = 0; y < next_frame.rows; y += 5)
+	{
+		for (int x = 0; x < next_frame.cols; x += 5)
+		{
+			const Point2f flowatxy = flow_frame.at<Point2f>(y, x) * 10;
+			line(next_frame, Point(x, y), Point(cvRound(x + flowatxy.x), cvRound(y + flowatxy.y)), Scalar(255, 0, 0));
+			circle(next_frame, Point(x, y), 1, Scalar(0, 0, 0), -1);
+		}
+	}
+		
+	namedWindow("prew", WINDOW_AUTOSIZE);
+	imshow("prew", next_frame);
+	
+	imwrite("000045_10_res.png", next_frame);
+	
+
+	return 0;
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
