@@ -14,8 +14,8 @@ int main()
 	Mat last_frame, next_frame;
 	Mat flow_frame;
 
-	last_frame = imread("000146_10.png");
-	next_frame = imread("000146_11.png");
+	last_frame = imread("image/leftimage/000146_10.png");
+	next_frame = imread("image/leftimage/000146_11.png");
 
 	Mat last_frame_gray, next_frame_gray;
 	cvtColor(last_frame, last_frame_gray, COLOR_BGR2GRAY);
@@ -31,12 +31,13 @@ int main()
 			circle(next_frame, Point(x, y), 1, Scalar(0, 0, 0), -1);
 		}
 	}
-		
+
 	namedWindow("prew", WINDOW_AUTOSIZE);
 	imshow("prew", next_frame);
-	
-	imwrite("000146_10_res.png", next_frame);
-	
+
+	imwrite("image/resimage/000146_Farneback.png", next_frame);
+
 
 	return 0;
 }
+
