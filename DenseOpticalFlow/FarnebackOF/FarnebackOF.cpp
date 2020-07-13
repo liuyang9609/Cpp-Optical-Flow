@@ -14,14 +14,14 @@ int main()
 	Mat last_frame, next_frame;
 	Mat flow_frame;
 
-	last_frame = imread("image/leftimage/000146_10.png");
-	next_frame = imread("image/leftimage/000146_11.png");
+	last_frame = imread("image/leftimage/000045_10.png");
+	next_frame = imread("image/leftimage/000045_11.png");
 
 	Mat last_frame_gray, next_frame_gray;
 	cvtColor(last_frame, last_frame_gray, COLOR_BGR2GRAY);
 	cvtColor(next_frame, next_frame_gray, COLOR_BGR2GRAY);
 
-	calcOpticalFlowFarneback(last_frame_gray, next_frame_gray, flow_frame, 0.4, 1, 36, 2, 8, 1.2, 0);
+	calcOpticalFlowFarneback(last_frame_gray, next_frame_gray, flow_frame, 0.5, 1, 64, 2, 8, 1.6, 0);
 	for (int y = 0; y < next_frame.rows; y += 5)
 	{
 		for (int x = 0; x < next_frame.cols; x += 5)
@@ -35,7 +35,7 @@ int main()
 	namedWindow("prew", WINDOW_AUTOSIZE);
 	imshow("prew", next_frame);
 
-	imwrite("image/resimage/000146_Farneback.png", next_frame);
+	imwrite("image/resimage/000045_Farneback-64.png", next_frame);
 
 
 	return 0;
