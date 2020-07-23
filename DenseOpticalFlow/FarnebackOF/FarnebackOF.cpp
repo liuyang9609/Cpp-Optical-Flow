@@ -27,8 +27,13 @@ int main()
 		for (int x = 0; x < next_frame.cols; x += 5)
 		{
 			const Point2f flowatxy = flow_frame.at<Point2f>(y, x) * 10;
-			line(next_frame, Point(x, y), Point(cvRound(x + flowatxy.x), cvRound(y + flowatxy.y)), Scalar(255, 0, 0));
-			circle(next_frame, Point(x, y), 1, Scalar(0, 0, 0), -1);
+			line(next_frame, Point(x, y), Point(cvRound(x + flowatxy.x), cvRound(y + flowatxy.y)), Scalar(255, 0, 0));  
+			/*
+			flowatxy.x  flowatxy.y --光流偏移量
+			x y  -- 以5为步进均匀取点
+			x + flowatxy.x  y + flowatxy.y -- 新点位
+			*/
+			circle(next_frame, Point(x, y), 0.5, Scalar(0, 0, 255), -1);
 		}
 	}
 
