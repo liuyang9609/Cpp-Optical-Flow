@@ -14,8 +14,8 @@ int main()
 	Mat last_frame, next_frame;
 	Mat flow_frame;
 
-	last_frame = imread("image/left_img/000044_10.png");
-	next_frame = imread("image/left_img/000044_11.png");
+	last_frame = imread("image/left_img/000040_10.png");
+	next_frame = imread("image/left_img/000040_11.png");
 
 	Mat last_frame_gray, next_frame_gray;
 	cvtColor(last_frame, last_frame_gray, COLOR_BGR2GRAY);
@@ -40,7 +40,7 @@ int main()
 	namedWindow("prew", WINDOW_AUTOSIZE);
 	imshow("prew", next_frame);
 
-	imwrite("image/res_img/000044_Farneback-64.png", next_frame);
+	imwrite("image/res_img/000040_Farneback-64.png", next_frame);
 
 
 	return 0;
