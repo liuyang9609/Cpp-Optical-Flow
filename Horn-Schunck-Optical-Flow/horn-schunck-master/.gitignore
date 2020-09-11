@@ -1,0 +1,12 @@
+valgrind
+main.dSYM
+bin
+*.swp
+prog
+*.o
+*.d
+video
+_video
+derivative
+out.mp4
+file.mp4
