@@ -26,23 +26,29 @@ void preprocess(cv::Mat imagePrevRaw, cv::Mat imageNextRaw, cv::Mat &imagePrev, 
 }
 
 int main(int argc, char* argv[]) {
-    if(argc < 6){
-        std::cout << "Syntax Error - Incorrect Parameter Usage:" << std::endl;
-        std::cout << "program_name ['image' (or) mp4 input path] [prev image path (or) prev frame number] [next image path (or) next frame number] [save path] [hs (or) fb]" << std::endl;
-        return 0;
-    }
+    //if(argc < 6){
+    //    std::cout << "Syntax Error - Incorrect Parameter Usage:" << std::endl;
+    //    std::cout << "program_name ['image' (or) mp4 input path] [prev image path (or) prev frame number] [next image path (or) next frame number] [save path] [hs (or) fb]" << std::endl;
+    //    return 0;
+    //}
     
-    std::string inputType = argv[1];
-    std::string framePrev = argv[2];
-    std::string frameNext = argv[3];
-    std::string savePath = argv[4];
-    std::string algo = argv[5];
+    //std::string inputType = argv[1];
+    //std::string framePrev = argv[2];
+    //std::string frameNext = argv[3];
+    //std::string savePath = argv[4];
+    //std::string algo = argv[5];
+
+    std::string inputType = "image";
+    std::string framePrev = "img/leftimage/000050_10.png";
+    std::string frameNext = "img/leftimage/000050_11.png";
+    std::string savePath = "img/resimage/000050_10.png";
+    std::string algo = "hs";
     
     // Read input images or video frames based on first input
     cv::Mat imagePrevRaw, imageNextRaw;
     if (inputType == "image"){
-        imagePrevRaw = cv::imread(argv[2]);
-        imageNextRaw = cv::imread(argv[3]);
+        imagePrevRaw = cv::imread(framePrev);
+        imageNextRaw = cv::imread(frameNext);
     }
     else if (inputType.substr(inputType.length() - 4, 4) == ".mp4"){
         cv::VideoCapture capture(inputType);
