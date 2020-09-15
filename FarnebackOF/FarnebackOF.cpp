@@ -40,6 +40,7 @@ int main()
 	namedWindow("prew", WINDOW_AUTOSIZE);
 	imshow("prew", next_frame);
 
+
 	imwrite("image/res_img/000040_Farneback-64.png", next_frame);
 
 
