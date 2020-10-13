@@ -81,7 +81,10 @@ void tracking(Mat& frame, Mat& output)
 	{
 		line(output, initial[i], points[1][i], Scalar(0, 0, 255));
 		circle(output, points[1][i], 3, Scalar(0, 255, 0), -1);
-
+		//打印出特征点位置
+		/*printf("第%d（%4f, %4f）\t\n", i, points[1][i]);*/
+		cout << "第" << i << "点坐标为:";
+		cout << points[1][i] << endl;
 	}
 
 	//把当前跟踪结果作为下一次的参考
