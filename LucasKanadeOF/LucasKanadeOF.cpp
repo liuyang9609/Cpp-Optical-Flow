@@ -34,8 +34,8 @@ int main()
 	Mat frame;
 	Mat result;
 
-	gray_prev = imread("image/leftimage/000045_10.png",0);
-	frame = imread("image/leftimage/000045_11.png", 1);
+	gray_prev = imread("image/left_img/000117_09.png",0);
+	frame = imread("image/left_img/000117_10.png", 1);
 
 	tracking(frame, result);     //跟踪
 
