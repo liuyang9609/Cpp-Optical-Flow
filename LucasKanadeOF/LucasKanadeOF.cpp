@@ -34,10 +34,13 @@ int main()
 	Mat frame;
 	Mat result;
 
-	gray_prev = imread("image/left_img/000117_09.png",0);
-	frame = imread("image/left_img/000117_10.png", 1);
+	gray_prev = imread("image/left_img/000043_12.png",0);
+	frame = imread("image/left_img/000043_13.png", 1);
 
 	tracking(frame, result);     //跟踪
+
+	Mat prev_frame = imread("image/left_img/000043_12.png", 1);
+	Mat next_frame = imread("image/left_img/000043_13.png", 1);
 
 	return 0;
 }
@@ -83,8 +86,9 @@ void tracking(Mat& frame, Mat& output)
 		circle(output, points[1][i], 3, Scalar(0, 255, 0), -1);
 		//打印出特征点位置
 		/*printf("第%d（%4f, %4f）\t\n", i, points[1][i]);*/
-		cout << "第" << i << "点坐标为:";
-		cout << points[1][i] << endl;
+		cout << "第" << i << "点坐标:";
+		cout << points[0][i];
+		cout << "与" << points[1][i] << "对应" << endl;
 	}
 
 	//把当前跟踪结果作为下一次的参考
