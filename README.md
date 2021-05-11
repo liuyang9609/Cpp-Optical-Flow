@@ -1,15 +1,16 @@
-# Optical-Flow
-Some implementation of optical flow algorithm.
+<!--
+ * @Author: Liu Yang
+ * @Date: 2021-05-11 23:46:06
+ * @LastEditors: Liu Yang
+ * @LastEditTime: 2021-05-12 00:05:09
+ * @Description: file content
+-->
+# CppOpticalFlow 
+**光流计算Cpp程序**.  
 
+其他项目在选择光流算法时的一些评估测试程序，不再计划使用。
 
+Email：liuyang9609@gmail.com
 
-## Farneback
-
-Farneb?ck, G. (2002). Polynomial expansion for orientation and motion estimation. In Technology (Issue 790).
-
-Farneb?ck, G. (2003). Two-frame motion estimation based on polynomial expansion. Lecture Notes in Computer Science (Including Subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics), 2749(1), 363�C370. https://doi.org/10.1007/3-540-45103-x_50
-
-
-## LucasKanade
-
-D��az, J., Ros, E., Pelayo, F., Ortigosa, E. M., & Mota, S. (2006). FPGA-based real-time optical-flow system. IEEE Transactions on Circuits and Systems for Video Technology, 16(2), 274�C279. https://doi.org/10.1109/TCSVT.2005.861947
+**Copyright © 2021, LiuYang. All Rights Reserved. 
+This project is free software and released under the MIT License.
