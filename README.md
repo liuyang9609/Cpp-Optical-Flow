@@ -1,10 +1,3 @@
-<!--
- * @Author: Liu Yang
- * @Date: 2021-05-11 23:46:06
- * @LastEditors: Liu Yang
- * @LastEditTime: 2021-05-12 00:05:09
- * @Description: file content
--->
 # CppOpticalFlow 
 **光流计算Cpp程序**.  
 
